@@ -42,7 +42,7 @@
                 <input class="form-control" id="exampleInputPassword1" type="text" value="2093"/>
             </div>
 
-            <div class="alert alert-primary" role="alert" id="checkfwcode">A simple primary alert&mdash;check it out!</div>
+            <div class="alert alert-primary" role="alert" id="checkfwcode">輸入完成後點擊下方"進行驗證"</div>
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">進行驗證</button>
         </form>
@@ -74,7 +74,7 @@
                                     document.getElementById("checkfwcode").innerHTML = "錯誤:" + x ;
 
                                 if (x==0)
-                                    document.getElementById("checkfwcode").innerHTML = "正確:" + x ;
+                                    document.getElementById("checkfwcode").innerHTML = "產品驗證正確，為XXX公司正品，感謝您的購買 : " + x ;
                             },
                             error:function () { //请求失败后调用的函数
                                 // console.log(JSON.stringify(textStatus));
