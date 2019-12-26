@@ -1,72 +1,89 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>跨域测试</title>
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#btn").click(function () {
-                $.ajax({
-                    url: "http://www.zgfw-315.com/fwqueryjson.ashx?fwcode=2156557411504082&u=2156",
-                    type: "GET",
-                    dataType: "jsonp", //指定服务器返回的数据类型
-                    jsonp: "callback",
-                    success: function (data) {
-                        var result = JSON.stringify(data); //json对象转成字符串
-                            $("#text").val(result);
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function(){
-            $("button").click(function(){
-                var form = document.forms['form'];
-                var name = form.elements.exampleInputEmail1.value;
-                var email = form.elements.exampleInputPassword1.value;
-                var text = "http://www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name+"&u="+email;
-                alert("你防偽碼是 " + name + "\n產品代碼是 " + email + "\ntext是 " + text);
-                $.ajax({
-                        url: "http://www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name+"&u="+email,
-                        type: "GET",
-                        dataType: "jsonp", //指定服务器返回的数据类型
-                        jsonp: "callback",
-                        success: function (data) {
-                            // var result = JSON.stringify(data); //json对象转成字符串
-                            // $("#checkfwcode").val(result);
-                            var x;
-                            x = data.CodeState;
-                            y = data.QueryResult;
-                            document.getElementById("text").innerHTML = "CodeState 是 " + x + "\nQueryResult 是 " + y;
-                        },
-                        error:function (textStatus) { //请求失败后调用的函数
-                            console.log(JSON.stringify(textStatus));
-                        }
-                });
-            });
-        });
-    </script>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Jekyll v3.8.5">
+        <title>Floating labels example · Bootstrap 4 繁體中文手冊 [六角學院譯]</title>
 
-</head>
+        <!-- Bootstrap core CSS -->
+        <link href="https://bootstrap.hexschool.com/docs/4.2/dist/css/bootstrap.css" rel="stylesheet">
+
+        <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+            }
+        }
+        </style>
+        <!-- Custom styles for this template -->
+        <link href="https://bootstrap.hexschool.com/docs/4.2/examples/floating-labels/floating-labels.css" rel="stylesheet">
+    </head>
     <body>
-        <input id="btn" type="button" value="跨域获取数据" />
-        <textarea id="text" style="width: 1000px; height: 100px;"></textarea>
+        <form class="form-signin" name='form' id='form'>
+            <div class="text-center mb-4">
+                <h1 class="h3 mb-3 font-weight-normal">防偽標籤驗證</h1>
+            </div>
 
-        <form name='form' id='form'>
             <div class="form-group">
                 <label for="exampleInputEmail1">防偽碼</label> 
-                <input  class="form-control" name="exampleInputEmail1" id="exampleInputEmail1" type="text" /> 
+                <input  class="form-control" id="exampleInputEmail1" type="text" value="2156557411504082"/> 
             </div>
         
             <div class="form-group">
                 <label for="exampleInputPassword1">產品代碼</label> 
-                <input class="form-control" name="exampleInputPassword1" id="exampleInputPassword1" type="text" />
+                <input class="form-control" id="exampleInputPassword1" type="text" value="2156"/>
             </div>
+
+            <div class="alert alert-primary" role="alert" id="checkfwcode">A simple primary alert&mdash;check it out!</div>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">進行驗證</button>
         </form>
-        <button class="btn btn-primary">Submit</button>
+
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("#form").submit(function(e){
+                    var form = document.forms['form'];
+                    var name = form.elements.exampleInputEmail1.value;
+                    var email = form.elements.exampleInputPassword1.value;
+                    var text = "http://www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name+"&u="+email;
+                    // alert("你防偽碼是 " + name + "\n產品代碼是 " + email + "\ntext是 " + text);
+                    e.preventDefault();
+                    $.ajax({
+                            url: "//www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name+"&u="+email,
+                            type: "GET",
+                            dataType: "jsonp", //指定服务器返回的数据类型
+                            jsonp: "callback",
+                            success: function (data) {
+                                // var result = JSON.stringify(data); //json对象转成字符串
+                                // $("#checkfwcode").val(result);
+                                var x;
+                                x = data.CodeState;
+                                if (x==2)
+                                    document.getElementById("checkfwcode").innerHTML = "重複了:" + x ;
+
+                                if (x==1)
+                                    document.getElementById("checkfwcode").innerHTML = "錯誤:" + x ;
+
+                                if (x==0)
+                                    document.getElementById("checkfwcode").innerHTML = "正確:" + x ;
+                            },
+                            error:function () { //请求失败后调用的函数
+                                // console.log(JSON.stringify(textStatus));
+                                document.getElementById("checkfwcode").innerHTML = "防偽碼 或是 產品代碼有錯誤";
+                            }
+                    });
+                    e.preventDefault();
+                });
+            });
+        </script>
     </body>
 </html>
