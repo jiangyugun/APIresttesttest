@@ -67,6 +67,7 @@
                                 // $("#checkfwcode").val(result);
                                 var x;
                                 x = data.CodeState;
+                                y = data.QueryResult;
                                 if (x==2)
                                     document.getElementById("checkfwcode").innerHTML = "重複了:" + x ;
 
@@ -74,7 +75,7 @@
                                     document.getElementById("checkfwcode").innerHTML = "錯誤:" + x ;
 
                                 if (x==0)
-                                    document.getElementById("checkfwcode").innerHTML = "產品驗證正確，為XXX公司正品，感謝您的購買 : " + x ;
+                                    document.getElementById("checkfwcode").innerHTML = "產品驗證正確，為XXX公司正品，感謝您的購買 : \n" + y + x ;
                             },
                             error:function () { //请求失败后调用的函数
                                 // console.log(JSON.stringify(textStatus));
