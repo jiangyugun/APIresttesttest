@@ -1,0 +1,122 @@
+
+
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全国商品防伪查询中心</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <style>
+        /*
+            主色调：湖蓝  007CC3
+        */
+        *{margin:0;padding:0;border:0;z-index:1;position:relative;}
+        .s_top_wrap{width:100%;border-bottom:1px solid #ebebeb;min-width:600px;height:32px;font-size:13px;font-weight:bold;color:#333;line-height:32px;}
+        .s_top_r{position:absolute;right:0;top:0;width:320px;text-align:right;}
+        .s_top_r a{font-weight:bold;line-height:32px;margin-right:19px;color:#555;text-decoration:none;}
+        .main{max-width:1000px;width:100%; background:url(/images/pcfwbg.png) no-repeat;background-size:100%;min-height:570px;margin:15px auto;}
+        .br{border:1px solid #ccc;}
+        .main_title{margin-top:80px;text-align:center;font-size:50px;letter-spacing:10px;color:#007CC3;font-weight:bold;}
+        .main_input{width:600px;margin:70px auto;}
+        .main_input label{line-height:30px;color:#007CC3;letter-spacing:5px;position:absolute;left:0px;top:0;}
+        .main_text{height:30px;width:360px;margin-left:110px;border:1px solid #007CC3;overflow:hidden;display:inline-block;vertical-align:top;padding-right:15px}
+        .input_text{height:30px;width:100%;border:0;padding-left:15px;outline:none;box-shadow:none;}
+        .main_span{width:100px;line-height:30px;background:#007CC3;color:#fff;text-align:center;font-weight:500;font-size:16px;letter-spacing:3px;display:inline-block;vertical-align:top;
+                   border:1px solid #007CC3;
+        }
+        #result,#tab,.player{margin-top:40px;font-size:16px;color:#333;line-height:29px;}
+		 .footer{text-align:center;color:#9c9c9c;text-decoration:none;font-size:13px;}
+         .footer_a:link,.footer_a:active,.footer_a:visited,.footer_a:hover{color:#9c9c9c;text-decoration:none;}
+    </style>
+</head>
+<body>
+    <div class="s_top_wrap"> 
+        <div class="s_top_r">
+            <a href="/home/unitlogin" class="nav">企业登陆</a>
+            <a href="/home/adminlogin" class="nav">管理员登陆</a>
+        </div>
+    </div>
+    <div class="main">
+        <div class="main_title">全国商品防伪查询中心</div>
+        <div class="main_input">
+            <label>防伪查询：</label>
+            <span class="main_text">
+                <input type="text" id="txtfwcode" class="input_text" placeholder="在此输入产品标签上的防伪码" />
+            </span><span class="main_span" id="btnSubmit">马上查询</span>
+
+            <div id="result"></div>
+            <div id="tab"></div>
+            <div class="player"></div>
+        </div>
+    </div>
+	    <div class="footer">
+      <a href="http://www.miitbeian.gov.cn" class="footer_a">粤ICP备14064162号-1</a>  | Copyright &copy; 2016-2020 , All Rights Reserved  | 
+    </div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/layer.js"></script>
+<script>
+    function browserRedirect() {
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+        if ((bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM)) {
+            window.location.href = "/home/m";
+        }
+    }
+    browserRedirect();
+    $(document).ready(function () {
+       $("#btnSubmit").click(funSubmit);
+    });
+
+    function funSubmit() {
+        var txtfwcode = $("#txtfwcode").val();
+        $("#tab").html("");
+        $(".player").html("");
+        $("#txtresult").val("");
+        if (txtfwcode.length < 8) {
+            layer.msg("防伪码长度不能少于8位", function () { });
+            return;
+        }
+      var index=  layer.msg('请稍候...', { icon: 16, shade: 0.3, time: 10000 });//加载层
+        $.ajax({
+            type: "get",
+            url: "/fwcode/fwqueryjson",
+            data: {
+                "fwcode": encodeURIComponent(txtfwcode)
+            },
+            dataType: "jsonp",
+            jsonp: "callback",
+            success: function (data) {
+                layer.close(index);
+                var temp = '';
+                temp = '' + data.result;
+                $("#result").html(temp);
+                if (data.audiopath) {
+                    var temp2 = '<audio src="' + data.audiopath + '" controls="controls" preload="metadata" style="width:550px;">您的浏览器不支持语音播报</audio>';
+                    $(".player").html(temp2);
+                }
+                if (data.base64) {
+                    $("#tab").html('<img src="' + data.base64 + '" alt=""  style="height:200px;" />');
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        })
+
+    }
+</script>
+</html>

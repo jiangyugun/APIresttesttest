@@ -1,0 +1,61 @@
+<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet" /><script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<p>Test 123</p>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+<div class="alert alert-primary" role="alert" id="checkfwcode">A simple primary alert&mdash;check it out!</div>
+
+<div class="alert alert-secondary d-none" role="alert" id="divCustomers">A simple secondary alert with <a class="alert-link" href="#">an example link</a>. Give it a click if you like.</div>
+
+<div class="alert alert-success" role="alert">
+<h4 class="alert-heading">Well done!</h4>
+
+<p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+
+<hr />
+<p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $("#form").submit(function(e){
+            var form = document.forms['form'];
+            var name = form.elements.exampleInputEmail1.value;
+            var email = form.elements.exampleInputPassword1.value;
+            var text = "http://www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name+"&u="+email;
+            // alert("你防偽碼是 " + name + "\n產品代碼是 " + email + "\ntext是 " + text);
+            e.preventDefault();
+            $.ajax({
+                    url: "//www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name+"&u="+email,
+                    type: "GET",
+                    dataType: "jsonp", //指定服务器返回的数据类型
+                    jsonp: "callback",
+                    success: function (data) {
+                        // var result = JSON.stringify(data); //json对象转成字符串
+                        // $("#checkfwcode").val(result);
+                        var x;
+                        x = data.CodeState;
+                        document.getElementById("checkfwcode").innerHTML = "CodeState:" + x ;
+                    },
+                    error:function (textStatus) { //请求失败后调用的函数
+                        console.log(JSON.stringify(textStatus));
+                    }
+            });
+            e.preventDefault();
+        });
+    });
+    </script>
+
+<form name='form' id='form'>
+    <div class="form-group">
+        <label for="exampleInputEmail1">防偽碼</label> 
+        <input  class="form-control" id="exampleInputEmail1" type="text" value="2156557411504082"/> 
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputPassword1">產品代碼</label> 
+        <input class="form-control" id="exampleInputPassword1" type="text" value="2156"/>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
