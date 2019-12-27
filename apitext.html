@@ -34,12 +34,12 @@
 
             <div class="form-group">
                 <label for="exampleInputEmail1">防偽碼</label> 
-                <input  class="form-control" id="exampleInputEmail1" type="text" value="" required/> 
+                <input  class="form-control" id="exampleInputEmail1" type="text" value="2156382416668100" required/> 
             </div>
         
             <div class="form-group">
                 <label for="exampleInputPassword1">產品代碼</label> 
-                <input class="form-control" id="exampleInputPassword1" type="text" value="1053" />
+                <input class="form-control" id="exampleInputPassword1" type="text" value="" />
             </div>
 
             <div class="alert alert-primary" role="alert" id="checkfwcode">輸入完成後點擊下方"進行驗證"</div>
@@ -54,8 +54,6 @@
                     var form = document.forms['form'];
                     var name = form.elements.exampleInputEmail1.value;
                     var email = form.elements.exampleInputPassword1.value;
-                    var text = "http://www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name+"&u="+email;
-                    // alert("你防偽碼是 " + name + "\n產品代碼是 " + email + "\ntext是 " + text);
                     e.preventDefault();
                     $.ajax({
                             url: "//www.zgfw-315.com/fwqueryjson.ashx?fwcode="+name,
